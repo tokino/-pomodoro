@@ -4,10 +4,11 @@ const path = require('path');
 
 module.exports = merge(common, {
   mode: "development",
-  devtool: 'eval',
+  watch: true,
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
-    port: 9000
+    port: 9000,
+    hot: false
   }
 });
