@@ -13,9 +13,8 @@ enum ButtonStatus {
 
 document.addEventListener('DOMContentLoaded', () => {
     const area = document.querySelector('.timer');
-    // const defaultSec = 60 * 25;
-    const defaultSec = 10;
-    const defaultBreakSec = 5;
+    const defaultSec = 60 * 25;
+    const defaultBreakSec = 60 * 5;
     const INTERVAL = 1000;
     let historyObject: HistoryObject = {
         start: new Date(),
