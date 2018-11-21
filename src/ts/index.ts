@@ -11,7 +11,20 @@ enum ButtonStatus {
     STOP = 'stop'
 }
 
+enum NotificationPermission {
+    GRANTED = 'granted',
+    DENIED = 'denied'
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+
+    // すでに通知の許可を得ているか確認する
+    if (Notification.permission !== NotificationPermission.GRANTED) {
+        Notification.requestPermission((permission) => {
+
+        });
+    }
+
     const area = document.querySelector('.timer');
     const defaultSec = 60 * 25;
     const defaultBreakSec = 60 * 5;
@@ -75,37 +88,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 history.push(historyObject);
                 addHistoryColumn();
             }
-            console.log(history);
-            console.log(history.length % 3 === 0);
+
             sec = status ? (history.length % 3 === 0 ? defaultBreakSec * 3 : defaultBreakSec) : defaultSec;
+            const notification = new Notification(status ? '休憩に入りましょう' : '集中して作業をしましょう');
+            setTimeout(notification.close.bind(notification), 2 * 1000);
             status = !status;
         }
 
         timerId = setTimeout(timer, INTERVAL);
     };
 
-    const button = document.querySelector('button');
+    const button = document.querySelector('.js-timer-btn');
 
     if (!button) {
         return;
     }
 
-    button.addEventListener('click', (e: MouseEvent) => {
+    button.addEventListener('click', (e: Event) => {
         const target = e.currentTarget as HTMLButtonElement;
         switch (target.dataset.status) {
             case ButtonStatus.START:
                 timerId = setTimeout(timer, INTERVAL);
-                button.dataset.status = ButtonStatus.STOP;
+                target.dataset.status = ButtonStatus.STOP;
                 button.textContent = 'STOP';
                 break;
             case ButtonStatus.PAUSE:
             case ButtonStatus.STOP:
                 clearTimeout(timerId);
-                button.dataset.status = ButtonStatus.START;
+                target.dataset.status = ButtonStatus.START;
                 button.textContent = 'START';
                 break;
             default:
                 break;
         }
+    });
+
+    const resetButton = document.querySelector('.js-reset-btn');
+
+    if (!resetButton) {
+        return;
+    }
+
+    resetButton.addEventListener('click', () => {
+        sec = defaultSec;
     });
 });
