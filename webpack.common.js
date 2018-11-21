@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -18,7 +19,10 @@ module.exports = {
       filename: 'index.html',
       template: 'src/pug/index.pug',
       chunks: ['app']
-    })
+    }),
+    new CopyWebpackPlugin([
+      'robots.txt'
+    ])
   ],
   module: {
     rules: [
