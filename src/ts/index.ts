@@ -1,5 +1,8 @@
 import '../stylus/style.styl';
 
+declare var DEFAULT_SEC: number;
+declare var DEFAULT_BREAK_SEC: number;
+
 interface HistoryObject {
     start: Date;
     end: Date;
@@ -76,10 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((db: IDBDatabase) => {
 
             const area = document.querySelector('.timer');
-            // const defaultSec = 60 * 25;
-            // const defaultBreakSec = 60 * 5;
-            const defaultSec = 5;
-            const defaultBreakSec = 1;
+            const defaultSec = DEFAULT_SEC;
+            const defaultBreakSec = DEFAULT_BREAK_SEC;
             const INTERVAL = 1000;
             let historyObject: HistoryObject = {
                 start: new Date(),
