@@ -12,6 +12,7 @@
   "devDependencies": {
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
+    "@types/howler": "^2.0.5",
     "babel-cli": "^6.11.4",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.4",
@@ -19,6 +20,7 @@
     "clean-webpack-plugin": "^1.0.0",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^1.0.1",
+    "howler": "^2.0.15",
     "html-webpack-plugin": "^3.2.0",
     "pug": "^2.0.3",
     "pug-cli": "^1.0.0-alpha6",

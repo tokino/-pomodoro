@@ -1,4 +1,6 @@
 import '../stylus/style.styl';
+import {Howl} from 'howler'
+import DB from "./db";
 
 declare var DEFAULT_SEC: number;
 declare var DEFAULT_BREAK_SEC: number;
@@ -17,44 +19,6 @@ enum ButtonStatus {
 enum NotificationPermission {
     GRANTED = 'granted',
     DENIED = 'denied'
-}
-
-class DB {
-    constructor(private name: string, private version: number = 1) {
-    };
-
-    public connect() {
-        const request = indexedDB.open(this.name, this.version);
-        return new Promise((resolve, reject) => {
-            request.addEventListener('error', (e) => {
-                resolve({
-                    name: e.type,
-                    data: (<any>e.target).result
-                });
-            });
-
-            request.addEventListener('success', (e) => {
-                resolve({
-                    name: e.type,
-                    data: (<any>e.target).result
-                });
-            });
-
-            request.addEventListener('complete', (e) => {
-                resolve({
-                    name: e.type,
-                    data: (<any>e.target).result
-                });
-            });
-
-            request.addEventListener('upgradeneeded', (e) => {
-                resolve({
-                    name: e.type,
-                    data: (<any>e.target).result
-                });
-            });
-        });
-    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -78,6 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then((db: IDBDatabase) => {
 
+            let sound = new Howl({
+                src: 'http://itori.animenfo.com:443/;',
+                html5: true,
+                volume: 0.5
+            });
+
+            // console.log(sound.play());
+            // console.log(sound.play());
             const area = document.querySelector('.timer');
             const defaultSec = DEFAULT_SEC;
             const defaultBreakSec = DEFAULT_BREAK_SEC;
@@ -144,9 +116,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                 'history'
                             ], 'readwrite')
                             .objectStore('history');
-                        console.log(historyStore);
+                        sound.stop();
                         historyStore.add(historyObject);
                         addHistoryColumn();
+                    } else {
+                        sound = new Howl({
+                            src: 'http://itori.animenfo.com:443/;',
+                            html5: true,
+                            volume: 0.5
+                        });
+                        sound.play();
                     }
 
                     sec = status ? (history.length % 3 === 0 ? defaultBreakSec * 3 : defaultBreakSec) : defaultSec;
@@ -171,12 +150,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         timerId = setTimeout(timer, INTERVAL);
                         target.dataset.status = ButtonStatus.STOP;
                         button.textContent = 'STOP';
+                        sound = new Howl({
+                            src: 'http://itori.animenfo.com:443/;',
+                            html5: true,
+                            volume: 0.5
+                        });
+                        sound.play();
                         break;
                     case ButtonStatus.PAUSE:
                     case ButtonStatus.STOP:
                         clearTimeout(timerId);
                         target.dataset.status = ButtonStatus.START;
                         button.textContent = 'START';
+                        sound.pause();
                         break;
                     default:
                         break;
